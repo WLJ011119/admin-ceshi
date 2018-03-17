@@ -10,7 +10,7 @@ namespace app\adminer\controller;
 
 use Env;
 use think\Facade\Request;
-use app\adm\model\AuthUser;
+use app\adminer\model\AuthUser;
 
 class Login extends Adminbase
 {

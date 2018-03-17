@@ -82,8 +82,10 @@
                 beforeSend:function () {
                     layer.msg('登陆中...');
                 },
-                success:function (msg) {
-                    console.log(msg);
+                success:function (data) {
+                    if(data.errCode == "0") {
+                        window.location.href = "/adminer/index/index"
+                    }
                     return false;
                 }
             });

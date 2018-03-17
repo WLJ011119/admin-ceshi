@@ -41,11 +41,7 @@ class Adminbase extends Controller
         }
         $result['detail'] = $data;
 
-        if (strtolower(config('default_return_type'))) {
-            Response::create($result,config('default_return_type'))->send();
-            exit;
-        }
-
-        return $result;
+        Response::create($result,'json')->send();
+        exit;
     }
 }
