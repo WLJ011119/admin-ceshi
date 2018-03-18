@@ -36,20 +36,12 @@
 <div class="layui-layout layui-layout-admin">
     <!-- 头部 -->
     <div class="layui-header">
-        <div class="layui-logo">Benthink</div>
+        <div class="layui-logo">ThinkAdmin</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
-            <li top-bar top-id="1" class="layui-nav-item layui-this"><a href="javascript:;">控制台</a></li>
-            <li top-bar top-id="2" class="layui-nav-item"><a href="javascript:;">商品管理</a></li>
-            <li top-bar top-id="3" class="layui-nav-item"><a href="javascript:;">用户</a></li>
-            <li class="layui-nav-item">
-              <a href="javascript:;">其它系统</a>
-              <dl class="layui-nav-child">
-                <dd><a href="javascript:;">邮件管理</a></dd>
-                <dd><a href="javascript:;">消息管理</a></dd>
-                <dd><a href="javascript:;">授权管理</a></dd>
-              </dl>
-            </li>
+            {foreach $rule_tree as $key => $tree}
+            <li top-bar top-id="{$key}" class="layui-nav-item {if condition='$key==0'}layui-this{/if}"><a href="javascript:;">{$tree.title}</a></li>
+            {/foreach}
         </ul>
 
         <ul class="layui-nav layui-layout-right">
@@ -70,121 +62,26 @@
     <!-- 侧边栏 -->
     <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
-
-            <!-- 控制台的 -->
-            <ul left-bar left-id="1" class="layui-nav layui-nav-tree" lay-filter="left-nav" style="border-radius: 0;">
+        {foreach $rule_tree as $key => $tree}
+            <ul left-bar left-id="{$key}" class="layui-nav layui-nav-tree" lay-filter="left-nav" style="border-radius: 0;{if condition='$key!=0'}display:none;{/if}">
+            {if condition="isset($tree.children)"}
+            {foreach $tree.children as $children}
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a href="javascript:;" data-url="welcome.html" data-id="11" tab-item>
-                        欢迎
-                    </a>
-                </li>
-
-                <li class="layui-nav-item layui-nav-itemed">
-                    <a href="javascript:;" data-url="http://amazeui.org/widgets/m" data-id="1" tab-item>
-                        Amazeui Mobile
-                    </a>
-                </li>
-                <li class="layui-nav-item layui-nav-itemed">
-                    <a href="javascript:;">
-                        下拉
-                    </a>
+                    <a href="javascript:;" data-url="http://www.baidu.com" data-id="{$children.id}" tab-item>{$children.title}</a>
+                    {if condition="isset($children.children)"}
                     <dl class="layui-nav-child">
+                    {foreach $children.children as $child}
                         <dd>
-                            <a href="javascript:;" data-url="form.html" data-id="2" tab-item>
-                                表单
-                            </a>
+                            <a href="javascript:;" data-url="www.baidu.com" data-id="{$child.id}" tab-item>{$child.title}</a>
                         </dd>
-                        <dd>
-                            <a href="javascript:;" data-url="http://cn.bing.com/" data-id="3" tab-item>
-                                必应
-                            </a>
-                        </dd>
-                        <dd>
-                            <a href="javascript:;" data-url="https://www.so.com/" data-id="4" tab-item>
-                                360
-                            </a>
-                        </dd>
-                        <dd>
-                            <a href="javascript:;" data-url="https://www.sogou.com/" data-id="5" tab-item>
-                                搜狗
-                            </a>
-                        </dd>
+                    {/foreach}
                     </dl>
+                    {/if}
                 </li>
+            {/foreach}
+            {/if}
             </ul>
-
-            <!-- 商品管理的 -->
-            <ul left-bar left-id="2" class="layui-nav layui-nav-tree" lay-filter="left-nav" style="border-radius: 0;display:none;">
-                <li class="layui-nav-item layui-nav-itemed">
-                    <a href="javascript:;" data-url="http://amazeui.org/widgets/m" data-id="21" tab-item>
-                        管理商品的
-                    </a>
-                </li>
-                <li class="layui-nav-item layui-nav-itemed">
-                    <a href="javascript:;">
-                        搜索引擎
-                    </a>
-                    <dl class="layui-nav-child">
-                        <dd>
-                            <a href="javascript:;" data-url="https://www.baidu.com/" data-id="22" tab-item>
-                                百度
-                            </a>
-                        </dd>
-                        <dd>
-                            <a href="javascript:;" data-url="http://cn.bing.com/" data-id="23" tab-item>
-                                必应
-                            </a>
-                        </dd>
-                        <dd>
-                            <a href="javascript:;" data-url="https://www.so.com/" data-id="24" tab-item>
-                                360
-                            </a>
-                        </dd>
-                        <dd>
-                            <a href="javascript:;" data-url="https://www.sogou.com/" data-id="25" tab-item>
-                                搜狗
-                            </a>
-                        </dd>
-                    </dl>
-                </li>
-            </ul>
-
-            <!-- 用户的 -->
-            <ul left-bar left-id="3" class="layui-nav layui-nav-tree" lay-filter="left-nav" style="border-radius: 0;display:none;">
-                <li class="layui-nav-item layui-nav-itemed">
-                    <a href="javascript:;" data-url="http://amazeui.org/widgets/m" data-id="31" tab-item>
-                        用户的
-                    </a>
-                </li>
-                <li class="layui-nav-item layui-nav-itemed">
-                    <a href="javascript:;">
-                        搜索引擎
-                    </a>
-                    <dl class="layui-nav-child">
-                        <dd>
-                            <a href="javascript:;" data-url="https://www.baidu.com/" data-id="32" tab-item>
-                                百度
-                            </a>
-                        </dd>
-                        <dd>
-                            <a href="javascript:;" data-url="http://cn.bing.com/" data-id="33" tab-item>
-                                必应
-                            </a>
-                        </dd>
-                        <dd>
-                            <a href="javascript:;" data-url="https://www.so.com/" data-id="34" tab-item>
-                                360
-                            </a>
-                        </dd>
-                        <dd>
-                            <a href="javascript:;" data-url="https://www.sogou.com/" data-id="35" tab-item>
-                                搜狗
-                            </a>
-                        </dd>
-                    </dl>
-                </li>
-            </ul>
-
+        {/foreach}
 
         </div>
     </div>
@@ -200,10 +97,11 @@
 
     <!-- 底部 -->
     <div class="layui-footer" style="text-align: center; line-height: 44px;">
-        Copyright © 2017 <a href="http://mumbai.cat" target="_blank">Benthink</a> Powered by Dust
+        Copyright © 2017 <a href="http://mumbai.cat" target="_blank">thinkadmin</a> Powered by 秀才
     </div>
 </div>
 
+{block name="footerjs"}
 <script type="text/javascript">
 
     // $.Toast("标题", "你收到了一条消息", "success", {
@@ -304,5 +202,7 @@
 
     });
 </script>
+{/block}
+
 </body>
 </html>

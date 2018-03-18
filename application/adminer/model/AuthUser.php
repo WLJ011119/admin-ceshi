@@ -22,4 +22,5 @@ class AuthUser extends Model
         }
         return $user_info;
     }
+
 }

@@ -41,7 +41,7 @@ namespace extend;
   `condition` char(100) NOT NULL DEFAULT '',  # 规则附件条件,满足附加条件的规则,才认为是有效的规则
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-  ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+  ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='规则表';
   -- ----------------------------
   -- think_auth_group 用户组表，
   -- id：主键， title:用户组中文名称， rules：用户组拥有的规则id， 多个规则","隔开，status 状态：为1正常，为0禁用
@@ -53,7 +53,7 @@ namespace extend;
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `rules` char(80) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-  ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+  ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='用户组表';
   -- ----------------------------
   -- think_auth_group_access 用户组明细表
   -- uid:用户id，group_id：用户组id
@@ -65,7 +65,7 @@ namespace extend;
   UNIQUE KEY `uid_group_id` (`uid`,`group_id`),
   KEY `uid` (`uid`),
   KEY `group_id` (`group_id`)
-  ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='用户组明细表';
  */
 
 class Auth {
