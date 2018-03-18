@@ -14,6 +14,6 @@ class AuthRule extends Model
 {
 
     public static function getRuleList() {
-        return self::all();
+        return self::all()->toArray();
     }
 }
