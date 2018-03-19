@@ -10,20 +10,32 @@ namespace app\adminer\controller;
 
 use extend\Tree;
 use app\adminer\model\AuthRule;
+use think\facade\Request;
+use think\facade\Response;
+use extend\PHPTree;
 
 class System extends Adminbase
 {
 
     public function menuList() {
-        $rule_list = AuthRule::getRuleList();
-
-        $option = [
-            'parent_key'    => 'parent_id'
-        ];
-        $tree = new Tree($rule_list, $option);
-        $html_tree = $tree->getArray();
-        $this->assign('tree', $html_tree);
-
+        if(Request::instance()->isAjax()) {
+            $rule_list = AuthRule::getRuleList();
+            $option = [
+                'parent_key'    => 'parent_id',
+                'menu_name'     => 'title',
+            ];
+            $tree = new Tree($rule_list, $option);
+            $html_tree = $tree->getArray();
+            $data = [
+                'code'      => 0,
+                'msg'       => '',
+                'count'     => 1000,
+                'data'      => $html_tree,
+            ];
+            Response::create($data, 'json')->send();
+            exit;
+        }
+//        dump(PHPTree::makeTree(AuthRule::getRuleList()));
         return $this->fetch('menulist');
     }
 }

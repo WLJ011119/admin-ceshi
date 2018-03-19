@@ -1,6 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>layui在线调试</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <script type="text/javascript" src="/layui/layui.js"></script>
+    <style>
+        body{margin: 10px;}
+        .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
+    </style>
+</head>
+<body>
+
+<table class="layui-hide" id="menulist" lay-filter="demo"></table>
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
-
+<script>
+    layui.use(['table'], function(){
+        var table = layui.table; // 表格
+        //执行一个 table 实例
+        table.render({
+            elem: '#menulist',
+            height: 'auto',
+            url: "{:url('system/menulist')}", // 数据接口
+//            page: true, // 开启分页
+            cols: [[ //表头
+                {field: 'id', title: 'ID', width:80, fixed: 'left'},
+                {field: 'title', title: '菜单', width:180},
+                {field: 'parent_id', title: 'PID', width:80},
+                {field: 'name', title: '路径', width:220},
+                {field: 'sort', title: '排序', width:80},
+                {field: 'status', title: '状态', width: 170},
+                {fixed: 'right', width: 165, align:'center', toolbar: '#barDemo'}
+            ]]
+        });
+    });
+</script>
+</body>
+</html>

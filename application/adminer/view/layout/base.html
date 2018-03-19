@@ -67,12 +67,12 @@
             {if condition="isset($tree.children)"}
             {foreach $tree.children as $children}
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a href="javascript:;" data-url="http://www.baidu.com" data-id="{$children.id}" tab-item>{$children.title}</a>
+                    <a href="javascript:;" data-url="/{$children.name}" data-id="{$children.id}" tab-item>{$children.title}</a>
                     {if condition="isset($children.children)"}
                     <dl class="layui-nav-child">
                     {foreach $children.children as $child}
                         <dd>
-                            <a href="javascript:;" data-url="www.baidu.com" data-id="{$child.id}" tab-item>{$child.title}</a>
+                            <a href="javascript:;" data-url="/{$child.name}" data-id="{$child.id}" tab-item>{$child.title}</a>
                         </dd>
                     {/foreach}
                     </dl>
