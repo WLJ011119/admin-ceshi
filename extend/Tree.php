@@ -43,6 +43,8 @@ class Tree
     public $option = array(
         /* 主键 */
         'primary_key'   => 'id',
+        /* 菜单 */
+        'menu_name'     => 'name',
         /* 父键 */
         'parent_key'    => 'parentid'
     );
@@ -102,7 +104,7 @@ class Tree
         {
             foreach($this->arr as $id => $a)
             {
-                if($a[$parent_key]  == $myid) $newarr[$id]  = $a;
+                if($a[$parent_key] == $myid) $newarr[$id]  = $a;
             }
         }
         return $newarr ? $newarr : false;
@@ -222,6 +224,7 @@ class Tree
     {
         $number = 1;
         $child = $this->get_child($myid);
+        extract($this->option);
         if(is_array($child)) {
             $total = count($child);
             foreach($child as $id => $a) {
@@ -234,7 +237,7 @@ class Tree
                 }
                 $spacer = $adds ? $adds . $j : '';
                 @extract($a);
-                $a['name'] = $spacer . ' ' . $a['name'];
+                $a[$menu_name] = $spacer . ' ' . $a[$menu_name];
                 $this->ret[$a['id']] = $a;
                 $fd = $adds . $k . '&nbsp;&nbsp;&nbsp;&nbsp;';
                 $this->getArray($id, $sid, $fd);
