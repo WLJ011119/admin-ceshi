@@ -39,7 +39,7 @@ class Tree
      * @access private
      */
     public $ret = '';
-    public $arrTree = [];
+    public $arrTree = array();
     public $option = array(
         /* 主键 */
         'primary_key'   => 'id',
@@ -98,14 +98,18 @@ class Tree
     function get_child($myid)
     {
         extract($this->option);
-        $a = $newarr = array();
+        $newarr = array();
 
         if(is_array($this->arr) || is_object($this->arr))
         {
             foreach($this->arr as $id => $a)
             {
-                if($a[$parent_key] == $myid) $newarr[$id]  = $a;
+                if($a[$parent_key] == $myid) {
+                    $newarr[$id]  = $a;
+                }
             }
+//            dbg($newarr);
+//            dbg("++++++++++++++++++++++");
         }
         return $newarr ? $newarr : false;
     }
@@ -244,6 +248,7 @@ class Tree
                 $number++;
             }
         }
+//        dbg($this->arrTree);
         return $this->arrTree;
     }
 }
