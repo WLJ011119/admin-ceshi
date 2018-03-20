@@ -39,7 +39,7 @@ class Tree
      * @access private
      */
     public $ret = '';
-
+    public $arrTree = array();
     public $option = array(
         /* 主键 */
         'primary_key'   => 'id',
@@ -240,12 +240,12 @@ class Tree
                 $spacer = $adds ? $adds . $j : '';
                 @extract($a);
                 $a[$menu_name] = $spacer . ' ' . $a[$menu_name];
-                $this->arr[$a['id']] = $a;
+                $this->arrTree[$a['id']] = $a;
                 $fd = $adds . $k . '&nbsp;&nbsp;&nbsp;&nbsp;';
                 $this->getArray($id, $sid, $fd);
                 $number++;
             }
         }
-        return $this->arr;
+        return $this->arrTree;
     }
 }
