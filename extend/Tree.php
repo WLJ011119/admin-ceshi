@@ -65,7 +65,6 @@ class Tree
     {
         $this->option = array_merge($this->option, $option);
         $this->arr =  $arr;
-        $this->ret = '';
     }
 
     /**
@@ -238,12 +237,12 @@ class Tree
                 $spacer = $adds ? $adds . $j : '';
                 @extract($a);
                 $a[$menu_name] = $spacer . ' ' . $a[$menu_name];
-                $this->ret[$a['id']] = $a;
+                $this->arr[$a['id']] = $a;
                 $fd = $adds . $k . '&nbsp;&nbsp;&nbsp;&nbsp;';
                 $this->getArray($id, $sid, $fd);
                 $number++;
             }
         }
-        return $this->ret;
+        return $this->arr;
     }
 }
