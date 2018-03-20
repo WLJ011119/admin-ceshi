@@ -97,13 +97,16 @@ class Tree
     function get_child($myid)
     {
         extract($this->option);
-        $a = $newarr = array();
+        $newarr = array();
 
         if(is_array($this->arr) || is_object($this->arr))
         {
             foreach($this->arr as $id => $a)
             {
-                if($a[$parent_key] == $myid) $newarr[$id]  = $a;
+                if($a[$parent_key] == $myid) {
+                    $newarr[$id] = $a;
+                    dbg($myid);
+                }
             }
         }
         return $newarr ? $newarr : false;
@@ -227,7 +230,7 @@ class Tree
         if(is_array($child)) {
             $total = count($child);
             foreach($child as $id => $a) {
-                $j = $k ='';
+                $j = $k = '';
                 if($number == $total) {
                     $j .= $this->icon[2];
                 } else{
