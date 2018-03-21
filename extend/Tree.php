@@ -65,7 +65,6 @@ class Tree
     {
         $this->option = array_merge($this->option, $option);
         $this->arr =  $arr;
-        $this->ret = '';
     }
 
     /**
@@ -104,12 +103,8 @@ class Tree
         {
             foreach($this->arr as $id => $a)
             {
-                if($a[$parent_key] == $myid) {
-                    $newarr[$id]  = $a;
-                }
+                if($a[$parent_key] == $myid) $newarr[$id] = $a;
             }
-//            dbg($newarr);
-//            dbg("++++++++++++++++++++++");
         }
         return $newarr ? $newarr : false;
     }
@@ -232,7 +227,7 @@ class Tree
         if(is_array($child)) {
             $total = count($child);
             foreach($child as $id => $a) {
-                $j = $k ='';
+                $j = $k = '';
                 if($number == $total) {
                     $j .= $this->icon[2];
                 } else{
@@ -248,7 +243,6 @@ class Tree
                 $number++;
             }
         }
-//        dbg($this->arrTree);
         return $this->arrTree;
     }
 }

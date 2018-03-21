@@ -94,11 +94,12 @@ class Auth {
 
     /**
      * 检查权限
-     * @param name string|array  需要验证的规则列表,支持逗号分隔的权限规则或索引数组
-     * @param uid  int           认证用户的id
-     * @param string mode        执行check的模式
-     * @param relation string    如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
-     * @return boolean           通过验证返回true;失败返回false
+     * @param mixed     $name       需要验证的规则列表,支持逗号分隔的权限规则或索引数组
+     * @param int       $uid        认证用户的id
+     * @param int       $type       认证类型
+     * @param string    $mode       执行check的模式
+     * @param string    $relation   如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
+     * @return boolean              通过验证返回true;失败返回false
      */
     public function check($name, $uid, $type = 1, $mode = 'url', $relation = 'or') {
         if (!$this->_config['auth_on']) {
@@ -144,7 +145,7 @@ class Auth {
 
     /**
      * 根据用户id获取用户组,返回值为数组
-     * @param  uid int     用户id
+     * @param  int $uid    用户id
      * @return array       用户所属的用户组 array(
      *     array('uid'=>'用户id','group_id'=>'用户组id','title'=>'用户组名称','rules'=>'用户组拥有的规则id,多个,号隔开'),
      *     ...)
@@ -188,12 +189,13 @@ class Auth {
             $_authList[$uid . $t] = array();
             return [];
         }
+//        dump($ids);
         $map = array(
-            'id' => ['in', $ids],
+            'id' => ['in', implode(',', $ids)],
             'type' => $type,
             'status' => 1,
         );
-
+//        dump($map);
         // 读取用户组所有权限规则
         $rules = db($this->_config['auth_rule'])->where($map)->field('condition,name')->select();
 
@@ -258,7 +260,7 @@ class Auth {
 
     //获取用户权限，并缓存
     public function getUserAccess($uid) {
-        $key = Ck::ADMIN_USER_ACCESS_LIST . $uid;
+        $key = 'ADMIN_USER_ACCESS_LIST_' . $uid;
         $accessList = cache($key);
 
         if (empty($accessList)) {
@@ -272,7 +274,7 @@ class Auth {
 
     //清除用户权限列表缓存
     public function rmUserAccess($uid) {
-        $key = Ck::ADMIN_USER_ACCESS_LIST . $uid;
+        $key = 'ADMIN_USER_ACCESS_LIST_' . $uid;
         cache($key, NULL);
     }
 
