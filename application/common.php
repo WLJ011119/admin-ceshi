@@ -40,6 +40,31 @@ function dbg($input, $filepath = '', $clean = false) {
 }
 
 /**
+ * 获取客户端IP地址
+ * @param integer $type 返回类型 0 返回IP地址 1 返回IPV4地址数字
+ * @return mixed
+ */
+function get_client_ip($type = 0) {
+    $type = $type ? 1 : 0;
+    $ip = NULL;
+    if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $arr = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        $pos = array_search('unknown', $arr);
+        if (false !== $pos)
+            unset($arr[$pos]);
+        $ip = trim($arr[0]);
+    }elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (isset($_SERVER['REMOTE_ADDR'])) {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+    // IP地址合法验证
+    $long = sprintf("%u", ip2long($ip));
+    $ip = $long ? array($ip, $long) : array('0.0.0.0', 0);
+    return $ip[$type];
+}
+
+/**
  *  远程调试工具，使用 SocketLog 插件工具，将需要跟踪的变量输出到浏览器中
  *  等效于调试用的 trace()函数
  * @param mixed $data       打印内容
@@ -48,7 +73,7 @@ function slog($data) {
     if(is_array($data) || is_object($data)) {
         $data = var_export($data, true);
     }
-    $request = think\Facade::Request::instance();
+    $request = think\Facade\Request::instance();
     think\facade\Log::record($request->domain().':   '.$data);
 }
 
@@ -365,4 +390,201 @@ function curl_request($url, $data = array(), $method='post', $headers = [], $tim
 //    dbg(curl_error($ch));  //查看报错信息
     curl_close($ch);
     return $ret;
+}
+
+/**
+ * 时间对比,生成多少分钟(天)(月)(年)前
+ * @param string $the_time 要对比的时间
+ * @return string
+ */
+function time_tran($the_time) {
+    //当前时间
+    $now_time = date("Y-m-d H:i:s", time());
+    $now_time = strtotime($now_time);
+    //对比的时间
+    $show_time = strtotime($the_time);
+    //时间差
+    $dur = $now_time - $show_time;
+    if ($dur < 0) {
+        return $the_time;
+    } else {
+        if ($dur < 60) {
+            return $dur . '秒前';
+        }
+        if ($dur < 3600) {
+            return floor($dur / 60) . '分钟前';
+        }
+        if ($dur < 86400) {
+            return floor($dur / 3600) . '小时前';
+        }
+        if ($dur < 2592000) {
+            return floor($dur / 86400) . '天前';
+        }
+        if ($dur < 31536000) {
+            return floor($dur / 2592000) . '月前';
+        }
+        if ($dur > 31536000) {
+            return floor($dur / 31536000) . '年前';
+        }
+    }
+}
+
+/**
+ * 初始化OSS配置
+ * @return OssClient
+ */
+function oss_init() {
+    //获取配置项，并赋值给对象$config
+    $config = config('common.aliyun_oss');
+    //实例化OSS
+    $ossClient = new OssClient($config['keyid'], $config['keysecret'], $config['endpoint'], true);
+    return $ossClient;
+}
+
+/**
+ * 上传文件到OSS
+ * @param string $object      上传到OSS后生成的文件名，如果含有路径会自动生成对应的目录
+ * （image/2017/25234523432.png 会自动创建image目录和其子目录2017,/image/2017/25234523432.png这种格式是错误的）
+ * @param string $path        本地文件的路径
+ * @param string $bucket      OSS的bucket名称
+ * @return string
+ */
+function uploadFileToOss($object, $path, $bucket = '') {
+    try {
+        $ossClient = oss_init();
+        if (empty($bucket)) {
+            $bucket = config('common.aliyun_oss')['bucket'];
+        }
+        return $ossClient->uploadFile($bucket, $object, $path);
+    } catch (OssException $e) {
+        return $e->getMessage();
+    }
+}
+
+/**
+ * 删除OSS上的文件
+ * @param string $object      要删除的文件
+ * @param string $bucket      OSS的bucket名称
+ * @return string
+ */
+function deleteFileFromOss($object, $bucket = '') {
+    try {
+        $ossClient = oss_init();
+        if (empty($bucket)) {
+            $bucket = config('common.aliyun_oss')['bucket'];
+        }
+        $ossClient->deleteObject($bucket, $object);
+    } catch (OssException $e) {
+        return $e->getMessage();
+    }
+}
+
+/**
+ * 格式化字节大小
+ * @param  number $size      字节数
+ * @param  string $delimiter 数字和单位分隔符
+ * @return string            格式化后的带单位的大小
+ */
+function format_bytes($size, $delimiter = '') {
+    $units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB');
+    for ($i = 0; $size >= 1024 && $i < 5; $i++)
+        $size /= 1024;
+    return round($size, 2) . $delimiter . $units[$i];
+}
+
+/**
+ * 统计每日短信发送次数
+ * @param string $phoneNum  手机号
+ * @param string $type      业务类型
+ * @param string $sms       短信库
+ * @return bool|string
+ */
+function countSmscodeMaxTimes($phoneNum, $type, $db='sms') {
+    $ip = get_client_ip();
+    $where = [
+        'phone' => $phoneNum,
+        'type' => $type,
+        'create_time' => ['between', [strtotime('today'), strtotime('tomorrow')]],
+//        'ip'            => ip2long($ip)
+    ];
+    //统计发送次数
+    $sendTimes = db($db)->where($where)->count();
+    //获取最大发送次数
+    $maxSendTimes = config('common.cl_sms')['max'];
+    if ($sendTimes >= $maxSendTimes) {
+        return '$_126';
+    }
+    return '$_128';
+}
+
+/**
+ * 手机短信入库
+ * @param array  $code      数据
+ * @param string $sms       短信库
+ * @return bool
+ */
+function addSmscodeInDb($data = [], $db="sms") {
+    if (countSmscodeMaxTimes($data['phoneNum'], $data['type']) == '$_126') {
+        return '$_126';
+    }
+
+    $where = [
+        'phone' => $data['phoneNum'],
+        'type' => $data['type'],
+    ];
+    $update = ['status' => 0];
+    // 让之前的验证码失效
+    db($db)->where($where)->update($update);
+
+    $data = [
+        'phone' => $data['phoneNum'],
+        'code' => $data['code'],
+        'type' => $data['type'],
+        'content' => $data['content'],
+        'create_time' => time(),
+        'ip' => get_client_ip(),
+    ];
+    $res = db($db)->insert($data);
+    if ($res !== false) {
+        return '$_0';
+    }
+    return '$_1';
+}
+
+/**
+ * 检查验证码
+ * @param string  $code       验证码
+ * @param string  $phoneNum   手机号
+ * @param integer $type       业务类型
+ * @param string  $sms        短信库
+ * @return string
+ */
+function checkSmscode($code, $phoneNum, $type, $db='sms') {
+    $where = [
+        'phone' => $phoneNum,
+        'type' => $type,
+    ];
+
+    $res = db($db)->where($where)->order('id','DESC')->find();
+    if (empty($res)) {
+        return '$_129';
+    }
+    if ($res['status'] == 0) {
+        return '$_130';
+    }
+
+    $lifecycle = config('common.cl_sms')['lifecycle'];
+    // 短信已过期
+    if ((time() - $res['create_time']) > $lifecycle * 60) {
+        return '$_130';
+    }
+    // 短信验证码验证失败
+    if ($code != $res['code']) {
+        return '$_131';
+    }
+    // 短信验证码验证成功
+    if ($code == $res['code']) {
+        db($db)->where($where)->update(['status' => 0]);
+        return '$_132';
+    }
 }
