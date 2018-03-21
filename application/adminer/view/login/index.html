@@ -74,15 +74,20 @@
         });
         form.on('submit(login)',function(data){
 //            console.log(data.field);
+            var index;
             $.ajax({
                 type:   'post',
                 url :   '/login',
                 data:   {userName: data.field.userName, password: hex_md5(data.field.password), captcha: data.field.captcha, rememberMe: data.field.rememberMe},
                 dataType:'json',
                 beforeSend:function () {
-                    layer.msg('登陆中...');
+//                    layer.msg('登陆中...');
+                    index = layer.load(1, {
+                        shade: [0.1,'#fff'] //0.1透明度的白色背景
+                    });
                 },
                 success:function (data) {
+                    layer.close(index);
                     if(data.errCode == "0") {
                         window.location.href = "/adminer/index/index"
                     }

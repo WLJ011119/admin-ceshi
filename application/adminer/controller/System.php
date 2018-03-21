@@ -8,11 +8,10 @@
 
 namespace app\adminer\controller;
 
-use extend\Tree;
 use app\adminer\model\AuthRule;
 use think\facade\Request;
 use think\facade\Response;
-use extend\PHPTree;
+use extend\Tree;
 
 class System extends Adminbase
 {
@@ -30,12 +29,11 @@ class System extends Adminbase
                 'code'      => 0,
                 'msg'       => '',
                 'count'     => 1000,
-                'data'      => $html_tree,
+                'data'      => array_values($html_tree),
             ];
             Response::create($data, 'json')->send();
             exit;
         }
-//        dump(PHPTree::makeTree(AuthRule::getRuleList()));
         return $this->fetch('menulist');
     }
 }

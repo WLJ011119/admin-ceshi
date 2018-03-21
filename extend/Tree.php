@@ -103,10 +103,7 @@ class Tree
         {
             foreach($this->arr as $id => $a)
             {
-                if($a[$parent_key] == $myid) {
-                    $newarr[$id] = $a;
-                    dbg($myid);
-                }
+                if($a[$parent_key] == $myid) $newarr[$id] = $a;
             }
         }
         return $newarr ? $newarr : false;
