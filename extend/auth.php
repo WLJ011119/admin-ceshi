@@ -167,7 +167,7 @@ class Auth {
      * @param integer $type
      */
     public function getAuthList($uid, $type) {
-        static $_authList = []; //保存用户验证通过的权限列表
+        static $_authList = array(); //保存用户验证通过的权限列表
         $t = implode(',', (array) $type);
         if (isset($_authList[$uid . $t])) {
             return $_authList[$uid . $t];
@@ -180,34 +180,31 @@ class Auth {
         //读取用户所属用户组
         $groups = $this->getGroups($uid);
 
-        $ids = []; //保存用户所属用户组设置的所有权限规则id
+        $ids = array(); //保存用户所属用户组设置的所有权限规则id
         foreach ($groups as $g) {
             $ids = array_merge($ids, explode(',', trim($g['rules'], ',')));
         }
         $ids = array_unique($ids);
         if (empty($ids)) {
             $_authList[$uid . $t] = array();
-            return [];
+            return array();
         }
-//        dump($ids);
         $map = array(
-            'id' => ['in', implode(',', $ids)],
             'type' => $type,
             'status' => 1,
         );
-//        dump($map);
-        // 读取用户组所有权限规则
-        $rules = db($this->_config['auth_rule'])->where($map)->field('condition,name')->select();
 
+        // 读取用户组所有权限规则
+        $rules = db($this->_config['auth_rule'])->where($map)->whereIn('id', $ids)->field('condition,name')->select();
         // 循环规则，判断结果。
-        $authList = []; //
+        $authList = array(); //
         foreach ($rules as $rule) {
             if (!empty($rule['condition'])) {
                 //根据condition进行验证
                 $user = $this->getUserInfo($uid); //获取用户信息,一维数组
                 $command = preg_replace('/\{(\w*?)\}/', '$user[\'\\1\']', $rule['condition']);
 //                     dump($command);//debug
-                $condition = [];
+                $condition = array();
                 @(eval('$condition=(' . $command . ');'));
                 if ($condition) {
                     $authList[] = strtolower($rule['name']);

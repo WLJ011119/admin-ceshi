@@ -18,8 +18,7 @@ class User extends Adminbase
         $controller = $req->controller();
         $action = $req->action();
         $auth = new Auth();
-//        dump($auth->getGroups(1));
-//        dump($auth->getAuthList(1, 1));
-        $auth->check($module . '/' . $controller . '/' . $action, 1);
+        $res = $auth->check($module . '/' . $controller . '/' . $action, 1);
+        dump($res);
     }
 }

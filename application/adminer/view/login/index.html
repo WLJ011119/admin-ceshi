@@ -90,6 +90,8 @@
                     layer.close(index);
                     if(data.errCode == "0") {
                         window.location.href = "/adminer/index/index"
+                    } else {
+                        layer.msg(data.msg);
                     }
                     return false;
                 }
