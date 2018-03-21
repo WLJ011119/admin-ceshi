@@ -40,6 +40,19 @@ function dbg($input, $filepath = '', $clean = false) {
 }
 
 /**
+ *  远程调试工具，使用 SocketLog 插件工具，将需要跟踪的变量输出到浏览器中
+ *  等效于调试用的 trace()函数
+ * @param mixed $data       打印内容
+ */
+function slog($data) {
+    if(is_array($data) || is_object($data)) {
+        $data = var_export($data, true);
+    }
+    $request = think\Facade::Request::instance();
+    think\facade\Log::record($request->domain().':   '.$data);
+}
+
+/**
  * 生成各种码
  * @param int $nums             生成多少个优惠码
  * @param array $exist_array    排除指定数组中的优惠码
@@ -303,4 +316,53 @@ function phoneNumMosaic($num) {
     $str_1 = substr($num, 0,3);
     $str_2 = substr($num, -4, strlen($num));
     return $str_1 . '***' . $str_2;
+}
+
+/**
+ * author william
+ * CURLOPT_SSL_VERIFYHOST的值 设为0表示不检查证书,设为1表示检查证书中是否有CN(common name)字段,设为2表示在1的基础上校验当前的域名是否与CN匹配
+ * 而libcurl早期版本中这个变量是boolean值，为true时作用同目前设置为2，后来出于调试需求，增加了仅校验是否有CN字段的选项，因此两个值true/false就不够用了，升级为0/1/2三个值。
+ * 再后来(libcurl_7.28.1之后的版本)，这个调试选项由于经常被开发者用错，被去掉了，因此目前也不支持1了，只有0/2两种取值。
+ * @param string    $url        请求链接
+ * @param array     $data       发送参数
+ * @param string    $method     请求方式
+ * @param array     $headers    设置的请求头
+ * @param int       $timeout    超时时间
+ * @param bool      $CA         HTTPS时是否进行严格认证
+ * @return mixed
+ */
+function curl_request($url, $data = array(), $method='post', $headers = [], $timeout = 10, $CA = false) {
+    $cacert = getcwd() . '/cacert.pem'; //CA根证书
+    $SSL = substr($url, 0, 8) == "https://" ? true : false;
+    if(strtolower($method) == 'get') {
+        $url .= http_build_query($data);
+    }
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout-2);
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.146 Safari/537.36');
+    if(!empty($headers)) {
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    }
+    if ($SSL && $CA) {
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);     // 只信任CA颁布的证书
+        curl_setopt($ch, CURLOPT_CAINFO, $cacert);                  // CA根证书（用来验证的网站证书是否是CA颁布）
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);        // 检查证书中是否设置域名，并且是否与提供的主机名匹配
+    } else if ($SSL && !$CA) {
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);    // 信任任何证书
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);        // 检查证书中是否设置域名
+    }
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:'));         //避免data数据过长问题
+    if(strtolower($method) == 'post') {
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    }
+
+    $ret = curl_exec($ch);
+//    dbg(curl_error($ch));  //查看报错信息
+    curl_close($ch);
+    return $ret;
 }
