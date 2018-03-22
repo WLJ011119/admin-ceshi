@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>后台管理系统</title>
+    <title>{block name="title"}后台管理系统{/block}</title>
     {block name="css"}
     <link rel="stylesheet" href="/layui/css/layui.css">
     <link rel="stylesheet" href="/backend/css/style.css">
@@ -18,7 +18,8 @@
     {/block}
 </head>
 <body>
-
+{block name="content"}
+{/block}
 </body>
 {block name="footerjs"}
 {/block}

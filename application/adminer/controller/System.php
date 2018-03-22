@@ -36,4 +36,24 @@ class System extends Adminbase
         }
         return $this->fetch('menulist');
     }
+
+    public function addMenu() {
+        if(Request::instance()->isAjax()) {
+
+        }
+        $html_tree = [];
+        $parent_id = input('get.p', 0);
+        if($parent_id) {
+            $rule_list = AuthRule::getRuleList();
+            $option = [
+                'parent_key'    => 'parent_id',
+                'menu_name'     => 'title',
+            ];
+            $tree = new Tree($rule_list, $option);
+            $html_tree = $tree->getArray(0,0, ' ');
+        }
+        $this->assign('tree', $html_tree);
+        $this->assign('pid', $parent_id);
+        return $this->fetch('addmenu');
+    }
 }

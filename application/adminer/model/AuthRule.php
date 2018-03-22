@@ -14,6 +14,7 @@ class AuthRule extends Model
 {
 
     public static function getRuleList() {
-        return self::all()->toArray();
+        $res = self::order('sort', 'asc')->select()->toArray();
+        return $res;
     }
 }

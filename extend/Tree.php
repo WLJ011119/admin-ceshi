@@ -219,7 +219,7 @@ class Tree
      * @author yangyunzhou@foxmail.com
     +------------------------------------------------
      */
-    function getArray($myid = 0, $sid = 0, $adds = '')
+    function getArray($myid = 0, $sid = 0, $fill='&nbsp;', $adds = '')
     {
         $number = 1;
         $child = $this->get_child($myid);
@@ -238,8 +238,9 @@ class Tree
                 @extract($a);
                 $a[$menu_name] = $spacer . ' ' . $a[$menu_name];
                 $this->arrTree[$a['id']] = $a;
-                $fd = $adds . $k . '&nbsp;&nbsp;&nbsp;&nbsp;';
-                $this->getArray($id, $sid, $fd);
+                $fill_rep = str_repeat($fill, 4);
+                $fd = $adds . $k . $fill_rep;
+                $this->getArray($id, $sid, $fill, $fd);
                 $number++;
             }
         }
