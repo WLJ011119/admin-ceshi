@@ -86,9 +86,9 @@ class Auth {
         $this->_config['auth_rule'] = $prefix . $this->_config['auth_rule'];
         $this->_config['auth_user'] = $prefix . $this->_config['auth_user'];
         $this->_config['auth_group_access'] = $prefix . $this->_config['auth_group_access'];
-        if (config('auth_config')) {
+        if (config('auth.')) {
             //可设置配置项 AUTH_CONFIG, 此配置项为数组。
-            $this->_config = array_merge($this->_config, config('auth_config'));
+            $this->_config = array_merge($this->_config, config('auth.'));
         }
     }
 

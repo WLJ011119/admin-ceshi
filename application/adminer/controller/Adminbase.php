@@ -10,6 +10,7 @@ namespace app\adminer\controller;
 
 use think\Facade\Request;
 use think\Facade\Response;
+use think\Facade\Config;
 use think\Controller;
 
 class Adminbase extends Controller
@@ -17,9 +18,13 @@ class Adminbase extends Controller
     protected $userInfo;
 
     public function initialize() {
-        $ruleTree = session('rule_tree');
         $this->tologin();
-        $ruleTree && self::assignRuleTree($ruleTree);
+        $authConf = Config::pull('auth');
+        if(isset($authConf['auth_menu']) && $authConf['auth_menu']) {
+            $this->assignRuleTree();
+        } else {
+            $this->assignUserRuleTree();
+        }
     }
 
     /**
@@ -51,10 +56,20 @@ class Adminbase extends Controller
      * 用户权限数组分配给模板
      * @param array $ruleTree
      */
-    public function assignRuleTree($ruleTree=[]) {
+    public function assignUserRuleTree() {
+        $ruleTree = [];
+        $uid = $this->userInfo['id'];
         $this->assign('rule_tree', $ruleTree);
     }
 
+    /**
+     * 分配所有权限数组给模板
+     */
+    public function assignRuleTree() {
+        $rule_list = \app\adminer\model\AuthRule::getRuleList();
+        $rule_tree = \extend\PHPTree::makeTree($rule_list);
+        $this->assign('rule_tree', $rule_tree);
+    }
     /**
      * 格式化返回数据
      * @param array $data   数据

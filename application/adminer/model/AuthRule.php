@@ -12,9 +12,25 @@ use think\Model;
 
 class AuthRule extends Model
 {
-
+    /**
+     * 获取访问列表
+     * @return array
+     */
     public static function getRuleList() {
         $res = self::order('sort', 'asc')->select()->toArray();
         return $res;
+    }
+
+    /**
+     * 添加访问规则
+     * @param array $data
+     * @return int|string
+     */
+    public static function addMenu($data=[]) {
+        if(isset($data['parent_id']) && $data['parent_id']) {
+            return self::where('parent_id', $data['parent_id'])->insert($data);
+        } else {
+            return self::insert($data);
+        }
     }
 }

@@ -36,12 +36,12 @@
     <div class="layui-form-item">
         <label class="layui-form-label">序号:</label>
         <div class="layui-input-inline">
-            <input type="text" name="num" lay-verify="num" placeholder="数字越小越靠前" autocomplete="off" class="layui-input">
+            <input type="text" name="num" lay-verify="number" placeholder="数字越小越靠前" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-inline">
-            <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+            <button class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
@@ -50,6 +50,35 @@
 
 {block name="footerjs"}
 <script>
-    layui.use('form', function(){});
+    layui.use('form', function(){
+        var form = layui.form;
+        form.verify({
+            menu: function (value) {
+                console.log(value.length);
+                if(value.length < 1) {
+                    return '菜单名称必填';
+                }
+            }
+        });
+        form.on('submit(submit)',function(data){
+            var index;
+            var pindex = parent.layer.getFrameIndex(window.name);
+            $.ajax({
+                type:       'post',
+                data:       data.field,
+                dataType:   'json',
+                beforeSend: function () {
+                    index = layer.load(0, {shade: false});
+                },
+                success:    function (msg) {
+                    layer.close(index);
+                    if(msg.errCode === "0") {
+                        parent.layer.close(pindex);
+                        parent.location.reload();
+                    }
+                }
+            });
+        });
+    });
 </script>
 {/block}

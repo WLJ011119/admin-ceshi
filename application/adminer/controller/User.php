@@ -19,6 +19,6 @@ class User extends Adminbase
         $action = $req->action();
         $auth = new Auth();
         $res = $auth->check($module . '/' . $controller . '/' . $action, 1);
-        dump($res);
+        dump($auth->getAuthList(1, 1));
     }
 }

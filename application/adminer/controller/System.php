@@ -39,7 +39,16 @@ class System extends Adminbase
 
     public function addMenu() {
         if(Request::instance()->isAjax()) {
-
+            $data = [
+                'parent_id' => input('post.parent', 0, 'intval'),
+                'name'      => input('post.path', ''),
+                'title'     => input('post.menu', ''),
+                'sort'      => input('post.num', 0, 'intval'),
+            ];
+            $res = AuthRule::addMenu($data);
+            if($res) {
+                $this->resultData('$_0');
+            }
         }
         $html_tree = [];
         $parent_id = input('get.p', 0);
