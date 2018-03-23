@@ -330,7 +330,7 @@ function shuffle_assoc($array) {
 }
 
 /**
- * 手机号打码
+ * 手机号打码(155****4536)
  * @param mixed    $num     手机号码
  * @return string
  */
@@ -338,9 +338,8 @@ function phoneNumMosaic($num) {
     if(!preg_match('/\d{11}/', $num)) {
         return $num;
     }
-    $str_1 = substr($num, 0,3);
-    $str_2 = substr($num, -4, strlen($num));
-    return $str_1 . '***' . $str_2;
+    $resstr = substr_replace($num,'****',3,4);
+    return $resstr;
 }
 
 /**
