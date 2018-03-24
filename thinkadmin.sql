@@ -55,18 +55,19 @@ DROP TABLE IF EXISTS `think_auth_rule`;
 CREATE TABLE `think_auth_rule` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` mediumint(9) DEFAULT '0',
+  `pth` varchar(30) DEFAULT '' COMMENT '记录菜单的层级关系',
   `name` char(80) NOT NULL DEFAULT '',
   `title` char(20) NOT NULL DEFAULT '',
   `type` tinyint(1) NOT NULL DEFAULT '1',
   `sort` tinyint(4) DEFAULT '0',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1:显示 0:隐藏',
   `condition` char(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COMMENT='规则表';
+) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COMMENT='规则表';
 
 /*Data for the table `think_auth_rule` */
 
-insert  into `think_auth_rule`(`id`,`parent_id`,`name`,`title`,`type`,`sort`,`status`,`condition`) values (1,0,'','控制台',1,0,1,''),(2,1,'','欢迎',1,0,1,''),(3,1,'','缓存',1,0,1,''),(4,1,'','报表',1,0,1,''),(5,1,'','备份',1,0,1,''),(6,0,'','站务管理',1,0,1,''),(7,6,'','网站菜单',1,0,1,''),(8,6,'','新闻',1,0,1,''),(9,6,'','广告',1,0,1,''),(10,6,'','友链',1,0,1,''),(11,0,'','会员服务',1,0,1,''),(12,11,'','用户管理',1,0,1,''),(13,11,'','短信管理',1,0,1,''),(14,0,'','系统',1,0,1,''),(15,14,'','设置',1,0,1,''),(16,14,'adminer/system/menuList','菜单',1,0,1,''),(17,14,'','权限',1,0,1,''),(18,14,'','管理员',1,0,1,''),(19,14,'','日志',1,0,1,''),(20,1,'','运维',1,0,1,'');
+insert  into `think_auth_rule`(`id`,`parent_id`,`pth`,`name`,`title`,`type`,`sort`,`status`,`condition`) values (1,0,'0,1','','控制台',1,0,1,''),(2,1,'0,1,2','adminer/index/welcome','欢迎',1,0,1,''),(3,1,'0,1,3','','缓存',1,0,1,''),(4,1,'0,1,4','','报表',1,0,1,''),(5,1,'0,1,5','','备份',1,0,1,''),(6,0,'0,6','','站务管理',1,1,1,''),(7,6,'0,6,7','','网站菜单',1,0,1,''),(8,6,'0,6,8','','新闻',1,0,1,''),(9,6,'0,6,9','','广告',1,0,1,''),(10,6,'0,6,10','','友链',1,0,1,''),(11,0,'0,11','','会员服务',1,2,1,''),(12,11,'0,11,12','','用户管理',1,0,1,''),(13,11,'0,11,13','','短信管理',1,0,1,''),(14,0,'0,14','','系统',1,3,1,''),(15,14,'0,14,15','','设置',1,0,1,''),(16,14,'0,14,16','adminer/system/menuList','菜单',1,0,1,''),(17,14,'0,14,17','','权限',1,0,1,''),(18,14,'0,14,18','','管理员',1,0,1,''),(19,14,'0,14,19','','日志',1,0,1,''),(20,1,'0,1,20','','运维',1,0,1,''),(21,0,'0,21','','其他',1,4,1,''),(22,21,'0,21,22','','游戏',1,0,1,''),(23,22,'0,21,22,23','','小转盘',1,0,1,''),(24,22,'0,21,22,24','','大转盘',1,0,1,'');
 
 /*Table structure for table `think_auth_user` */
 
