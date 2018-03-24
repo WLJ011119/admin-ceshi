@@ -33,4 +33,8 @@ class AuthRule extends Model
             return self::insert($data);
         }
     }
+
+    public static function editMenu($data=[], $where=[]) {
+        return self::where($where)->update($data);
+    }
 }

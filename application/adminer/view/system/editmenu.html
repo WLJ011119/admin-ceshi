@@ -1,56 +1,45 @@
 {extend name="layout/tpl" /}
 
-{block name="title"}菜单添加{/block}
+{block name="title"}菜单编辑{/block}
 
 {block name="content"}
 <form class="layui-form" action="">
-    {if condition="empty($pid)"}
     <div class="layui-form-item">
         <label class="layui-form-label">菜单:</label>
         <div class="layui-input-inline">
-            <input type="text" name="menu" lay-verify="menu" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
-            <input type="hidden" name="parent" value="0">
+            <input type="text" name="menu" lay-verify="menu" autocomplete="off" placeholder="请输入菜单名称" class="layui-input" value="{$data.title}">
+            <input type="hidden" name="id" value="{$data.id}">
         </div>
     </div>
-    {else}
-    <div class="layui-form-item">
-        <label class="layui-form-label">上级菜单:</label>
-        <div class="layui-input-inline">
-            <select name="parent">{foreach $tree as $tr}<option value="{$tr.id}" {if condition="$tr.id==$pid"}selected{/if}>{$tr.title}</option>{/foreach}</select>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">子菜单:</label>
-        <div class="layui-input-inline">
-            <input type="text" name="menu" lay-verify="menu" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
-        </div>
-    </div>
-    {/if}
 
     <div class="layui-form-item">
         <label class="layui-form-label">路径:</label>
         <div class="layui-input-inline">
-            <input type="text" name="path" lay-verify="path" autocomplete="off" placeholder="请输入访问路径" class="layui-input">
+            <input type="text" name="path" lay-verify="path" autocomplete="off" placeholder="请输入访问路径" class="layui-input" value="{$data.name}">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">序号:</label>
         <div class="layui-input-inline">
-            <input type="text" name="num" lay-verify="number" placeholder="数字越小越靠前" autocomplete="off" class="layui-input">
+            <input type="text" name="num" lay-verify="number" placeholder="数字越小越靠前" autocomplete="off" class="layui-input" value="{$data.sort}">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">状态:</label>
         <div class="layui-input-inline">
+            {if condition="$data.status"}
             <input type="radio" name="status" value="1" title="显示" checked="">
             <input type="radio" name="status" value="0" title="隐藏">
+            {else}
+            <input type="radio" name="status" value="1" title="显示">
+            <input type="radio" name="status" value="0" title="隐藏" checked="">
+            {/if}
+
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label"></label>
         <div class="layui-input-inline">
             <button class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
-            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
 </form>
@@ -62,6 +51,7 @@
         var form = layui.form;
         form.verify({
             menu: function (value) {
+                console.log(value.length);
                 if(value.length < 1) {
                     return '菜单名称必填';
                 }
@@ -69,6 +59,7 @@
         });
         form.on('submit(submit)',function(data){
             var index;
+            var pindex = parent.layer.getFrameIndex(window.name);
             $.ajax({
                 type:       'post',
                 data:       data.field,
@@ -79,13 +70,13 @@
                 success:    function (msg) {
                     layer.close(index);
                     if(msg.errCode === "0") {
+                        parent.layer.close(pindex);
                         parent.location.reload();
                     } else {
                         layer.msg(msg.msg);
                     }
                 }
             });
-            return false;   // 阻止表单跳转
         });
     });
 </script>
