@@ -25,7 +25,5 @@ class Member extends Adminbase
         return $this->fetch('index');
     }
 
-    public function grantAuth() {
 
-    }
 }
