@@ -82,6 +82,7 @@ CREATE TABLE `think_auth_user` (
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态 1:启用 0:禁止',
   `super` tinyint(1) DEFAULT '0' COMMENT '1:超级管理员 0:普通管理员',
   `remark` varchar(255) NOT NULL COMMENT '备注说明',
+  `create_at`  datetime NOT NULL COMMENT '创建日期',
   `last_login_time` datetime NOT NULL COMMENT '最后登录时间',
   `last_login_ip` varchar(15) NOT NULL DEFAULT '0' COMMENT '最后登录IP',
   `last_location` varchar(100) NOT NULL DEFAULT '0' COMMENT '最后登录位置',
@@ -91,7 +92,7 @@ CREATE TABLE `think_auth_user` (
 
 /*Data for the table `think_auth_user` */
 
-insert  into `think_auth_user`(`id`,`username`,`password`,`phone`,`salt`,`status`,`super`,`remark`,`last_login_time`,`last_login_ip`,`last_location`) values (1,'admin','1fd94b7170dc92c3a7bb642446fc5d30','','AQ2re5',1,1,'超级管理员','0000-00-00 00:00:00','0','0');
+insert  into `think_auth_user`(`id`,`username`,`password`,`phone`,`salt`,`status`,`super`,`remark`,`last_login_time`,`last_login_ip`,`last_location`) values (1,'admin','1fd94b7170dc92c3a7bb642446fc5d30','','AQ2re5',1,1,'超级管理员','2018-04-12 15:16:53','0000-00-00 00:00:00','0','0');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

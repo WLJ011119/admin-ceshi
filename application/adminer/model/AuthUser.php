@@ -12,6 +12,12 @@ use think\Model;
 
 class AuthUser extends Model
 {
+    /**
+     * 登陆
+     * @param $usename
+     * @param $password
+     * @return bool|null|static
+     */
     public static function login($usename, $password) {
         $user_info = self::get(['username'=>$usename]);
         if($user_info['username'] !== $usename) {
@@ -23,4 +29,30 @@ class AuthUser extends Model
         return $user_info;
     }
 
+    /**
+     * 获取成员列表
+     * @param string $field
+     * @param array $where
+     * @return \think\Paginator
+     */
+    public static function getList($field='*', $where=[]) {
+        $listRow = input('limit') ?: config('paginate.list_rows');
+        $res = self::field($field)
+            ->where(function ($query) use ($where){
+                if($where) $query->where($where);
+            })->paginate($listRow);
+        return $res;
+    }
+
+    /**
+     * 统计成员数量
+     * @param array $where
+     * @return int|string
+     */
+    public static function getCount($where=[]) {
+        $count = self::where(function ($query) use ($where) {
+            if($where) $query->where($where);
+        })->count();
+        return $count;
+    }
 }
