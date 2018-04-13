@@ -29,10 +29,14 @@ class Group extends Adminbase
     }
 
     public function grantAuth() {
-        $gid = input('gid', 0);
-        $datas = AuthGroup::getRule($gid);
-        $this->assign('datas', $datas);
+        if(Request::isPost()) {
 
-        return $this->fetch('grant');
+        } else {
+            $gid = input('gid', 0);
+            $rules = AuthGroup::getRule($gid);
+            $this->assign('rules', json_encode($rules));
+
+            return $this->fetch('grant');
+        }
     }
 }
