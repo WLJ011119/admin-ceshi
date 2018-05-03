@@ -1,7 +1,8 @@
 <?php 
 /**
- * @name PHPTree 
- * @author crazymus < QQ:291445576 >
+ * @author xiucai
+ * @author crazymus < QQ:291445576 (原作者)>
+ * @name PHPTree
  * @des PHP生成树形结构,无限多级分类
  * @version 1.2.0
  * @Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
