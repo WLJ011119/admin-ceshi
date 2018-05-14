@@ -1,40 +1,20 @@
 {extend name="layout/tpl" /}
 
-{block name="title"}菜单编辑{/block}
+{block name="title"}角色添加{/block}
 
 {block name="content"}
 <form class="layui-form" action="">
     <div class="layui-form-item">
-        <label class="layui-form-label">菜单:</label>
+        <label class="layui-form-label">名称:</label>
         <div class="layui-input-inline">
-            <input type="text" name="menu" lay-verify="menu" autocomplete="off" placeholder="请输入菜单名称" class="layui-input" value="{$data.title}">
-            <input type="hidden" name="id" value="{$data.id}">
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <label class="layui-form-label">路径:</label>
-        <div class="layui-input-inline">
-            <input type="text" name="path" lay-verify="path" autocomplete="off" placeholder="请输入访问路径" class="layui-input" value="{$data.name}">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">序号:</label>
-        <div class="layui-input-inline">
-            <input type="text" name="num" lay-verify="number" placeholder="数字越小越靠前" autocomplete="off" class="layui-input" value="{$data.sort}">
+            <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入角色名称" class="layui-input" value="">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">状态:</label>
         <div class="layui-input-inline">
-            {if condition="$data.status"}
-            <input type="radio" name="status" value="1" title="显示" checked="">
-            <input type="radio" name="status" value="0" title="隐藏">
-            {else}
-            <input type="radio" name="status" value="1" title="显示">
-            <input type="radio" name="status" value="0" title="隐藏" checked="">
-            {/if}
-
+            <input type="radio" name="status" value="1" title="启用" checked="">
+            <input type="radio" name="status" value="0" title="禁用">
         </div>
     </div>
     <div class="layui-form-item">
@@ -50,9 +30,9 @@
     layui.use('table', function(){
         var form = layui.form;
         form.verify({
-            menu: function (value) {
+            title: function (value) {
                 if(value.length < 1) {
-                    return '菜单名称必填';
+                    return '角色名称必填';
                 }
             }
         });
@@ -67,7 +47,7 @@
                     index = layer.load(0, {shade: false});
                 },
                 success:    function (msg) {
-                    layer.close(index);
+//                    layer.close(index);
                     if(msg.errCode === "0") {
                         parent.layer.close(pindex);
                         parent.location.reload();

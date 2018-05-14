@@ -48,6 +48,7 @@ class AuthGroup extends Model
         // 所有节点
         $allRule = self::field('id, parent_id pId, title name')
             ->table('think_auth_rule')
+            ->order('sort', 'asc')
             ->select();
         // 角色拥有的节点
         $res = self::field('rules')
@@ -60,5 +61,36 @@ class AuthGroup extends Model
             }
         }
         return $allRule;
+    }
+
+    /**
+     * 获取角色信息
+     * @param $gid
+     * @return array|false|null|\PDOStatement|string|Model
+     */
+    public static function getAuthGroupInfo($gid) {
+        $res = db('auth_group')->where('id', $gid)->find();
+        return $res;
+    }
+
+    /**
+     * 更新角色信息
+     * @param $gid
+     * @array $data
+     * @return bool
+     */
+    public static function updateAuthGroup($gid, $data=[]) {
+        $res = db('auth_group')->where('id', $gid)->update($data);
+        return $res === false ? false : true;
+    }
+
+    /**
+     * 添加角色
+     * @param array $data
+     * @return bool
+     */
+    public static function addAuthGroup($data=[]) {
+        $res = db('auth_group')->insert($data);
+        return $res ? true : false;
     }
 }

@@ -22,7 +22,7 @@ class Member extends Adminbase
             exit;
         }
 
-        return $this->fetch('index');
+        return $this->fetch('memberlist');
     }
 
 
