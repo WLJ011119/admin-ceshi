@@ -9,9 +9,11 @@ namespace app\adminer\controller;
 
 use think\Facade\Request;
 use app\adminer\model\AuthUser;
+use app\adminer\model\AuthGroup;
 
 class Member extends Adminbase
 {
+
     public function index() {
         if(Request::isAjax()) {
             $res['count'] = AuthUser::getCount();
@@ -25,5 +27,133 @@ class Member extends Adminbase
         return $this->fetch('memberlist');
     }
 
+    public function add() {
+        if(Request::isPost()) {
+            $username = input('username');
+            $password = input('password');
+            $repassword = input('repassword');
 
+            if(empty($username) || empty($password)) {
+                $this->resultData('$_103');
+            }
+            if(strlen($password) < 6) {
+                $this->resultData('$_201');
+            }
+            if($password != $repassword) {
+                $this->resultData('$_200');
+            }
+            $salt = randStr(6);
+            $data = [
+                'username'  => $username,
+                'password'  => md5($password.$salt),
+                'salt'      => $salt,
+                'status'    => 1,
+                'remark'    => input('remark'),
+                'create_at' => date('Y-m-d H:i:s')
+            ];
+            if(AuthUser::addUser($data)) {
+                $this->resultData('$_0');
+            } else {
+                $this->resultData('$_1');
+            }
+        } else {
+            return $this->fetch('addmember');
+        }
+    }
+
+    public function edit() {
+        if(Request::isPost()) {
+            $uid = input('uid');
+            $username = input('username');
+
+            if(empty($uid) || empty($username)) {
+                $this->resultData('$_103');
+            }
+            $data = [
+                'username'  => $username,
+                'status'    => 1,
+                'remark'    => input('remark'),
+            ];
+            if(AuthUser::updateUser($uid, $data)) {
+                $this->resultData('$_0');
+            } else {
+                $this->resultData('$_1');
+            }
+        } else {
+            $uid = input('uid');
+            $memberInfo = AuthUser::getUser(['id'=>$uid]);
+            if(empty($memberInfo)) {
+                return '管理员不存在';
+            }
+
+            $this->assign('memberInfo', $memberInfo);
+            return $this->fetch('editmember');
+        }
+    }
+
+    public function editPassword() {
+        $uid = input('uid');
+        if($this->userInfo['id'] != $uid && $this->userInfo['super'] != 1) {
+            return '你无权操作请联系超级管理';
+        }
+        if(Request::isPost()) {
+            $uid = input('uid');
+            $username = input('username');
+            $password = input('password');
+            $repassword = input('repassword');
+
+            if(empty($uid) || empty($username) || empty($password)) {
+                $this->resultData('$_103');
+            }
+            if(strlen($password) < 6) {
+                $this->resultData('$_201');
+            }
+            if($password != $repassword) {
+                $this->resultData('$_200');
+            }
+            $salt = randStr(6);
+            $data = [
+                'username'  => $username,
+                'password'  => md5($password.$salt),
+                'salt'      => $salt,
+                'status'    => 1,
+            ];
+            if(AuthUser::updateUser($uid, $data)) {
+                $this->resultData('$_0');
+            } else {
+                $this->resultData('$_1');
+            }
+        } else {
+            $memberInfo = AuthUser::getUser(['id'=>$uid]);
+            if(empty($memberInfo)) {
+                return '管理员不存在';
+            }
+
+            $this->assign('memberInfo', $memberInfo);
+            return $this->fetch('editpassword');
+        }
+    }
+
+    public function grant() {
+        if(Request::isPost()) {
+            $uid = input('post.uid');
+            $group = input('post.group/a', []);
+            if(AuthUser::updateGroupOfUser($uid, $group)) {
+                $this->resultData('$_0');
+            } else {
+                $this->resultData('$_1');
+            }
+        } else {
+            $uid = input('uid');
+            $groupList = AuthGroup::getAllGroup();
+            $memberGroup = AuthUser::getGroupOfUser($uid);
+            $memberGroup = array_column($memberGroup, 'id');
+
+            $this->assign('uid', $uid);
+            $this->assign('groupList', $groupList);
+            $this->assign('memberGroup', $memberGroup);
+
+            return $this->fetch('grant');
+        }
+    }
 }

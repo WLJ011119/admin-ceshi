@@ -19,6 +19,7 @@ class Adminbase extends Controller
 
     public function initialize() {
         $this->tologin();
+        $this->specialActionCheck();
         $authConf = Config::pull('auth');
         if(isset($authConf['auth_menu']) && $authConf['auth_menu']) {
             $this->assignRuleTree();
@@ -123,5 +124,27 @@ class Adminbase extends Controller
             }
         }
         return true;
+    }
+
+    /**
+     * 特殊行为检查
+     * @return string
+     */
+    protected function specialActionCheck() {
+        $requestObj = Request::instance();   // 获取 模块/控制器/操作名称
+        $module = $requestObj->module();
+        $controller = $requestObj->controller();
+        $action = $requestObj->action();
+        $url = $module .'/'. $controller .'/'. $action;
+        // 特殊行为集合
+        $specialController = [
+            'adminer/member/add','adminer/member/edit','adminer/member/grant',
+            'adminer/group/add','adminer/group/edit','adminer/group/grantauth',
+        ];
+        if(in_array(strtolower($url), $specialController)) {
+            if($this->userInfo['super'] != 1) {
+                return '你无权操作请联系超级管理';
+            }
+        }
     }
 }

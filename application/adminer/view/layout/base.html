@@ -75,9 +75,11 @@
                     {if condition="isset($children.children)"}
                     <dl class="layui-nav-child">
                     {foreach $children.children as $child}
+                        {if condition="$child.status"}
                         <dd>
                             <a href="javascript:;" data-url="/{$child.name}" data-id="{$child.id}" tab-item>{$child.title}</a>
                         </dd>
+                        {/if}
                     {/foreach}
                     </dl>
                     {/if}

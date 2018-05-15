@@ -27,6 +27,10 @@ class AuthGroup extends Model
         return $res;
     }
 
+    public static function getAllGroup() {
+        $res = self::where('status', 1)->select();
+        return $res;
+    }
     /**
      * 角色数量统计
      * @param array $where
