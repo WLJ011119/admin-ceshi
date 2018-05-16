@@ -149,10 +149,11 @@ class Adminbase extends Controller
      * @return string
      */
     protected function specialActionCheck() {
-        // 特殊行为集合
+        // 特殊行为集合,注意都是小写
         $specialController = [
             'adminer/member/add','adminer/member/edit','adminer/member/grant',
             'adminer/group/add','adminer/group/edit','adminer/group/grantauth',
+            'adminer/system/addmenu','adminer/system/editmenu','adminer/system/delmenu',
         ];
         if(in_array(strtolower($this->urlParameter['path']), $specialController)) {
             if($this->userInfo['super'] != 1) {

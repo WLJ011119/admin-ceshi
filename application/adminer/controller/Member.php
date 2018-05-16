@@ -51,6 +51,9 @@ class Member extends Adminbase
                 'remark'    => input('remark'),
                 'create_at' => date('Y-m-d H:i:s')
             ];
+            if(!empty(AuthUser::getUser(['username'=>$username]))) {
+                $this->resultData('$_202');
+            }
             if(AuthUser::addUser($data)) {
                 $this->resultData('$_0');
             } else {
