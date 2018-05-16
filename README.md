@@ -19,9 +19,9 @@ ThinkAdmin v1.0
 
 ## 界面预览
 
-![界面预览](https://gitee.com/bullet/thinkadmin/blob/master/screenshots/20180516182602.png "截图1")
-![界面预览](https://gitee.com/bullet/thinkadmin/blob/master/screenshots/20180516182636.png "截图2")
-![界面预览](https://gitee.com/bullet/thinkadmin/blob/master/screenshots/20180516182712.png "截图3")
+![界面预览](https://gitee.com/bullet/thinkadmin/raw/master/screenshots/20180516182602.png "截图1")
+![界面预览](https://gitee.com/bullet/thinkadmin/raw/master/screenshots/20180516182636.png "截图2")
+![界面预览](https://gitee.com/bullet/thinkadmin/raw/master/screenshots/20180516182712.png "截图3")
 
 ## 版权信息
 
