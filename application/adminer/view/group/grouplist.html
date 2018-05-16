@@ -4,6 +4,12 @@
 {block name="css"}
 {__block__}
 <style type="text/css">
+    .use{
+        color: #1d943b;
+    }
+    .nouse{
+        color: #942a25;
+    }
 </style>
 {/block}
 {block name="content"}
@@ -58,7 +64,7 @@
                     shadeClose: true,
                     shade: 0.8,
                     maxmin: true, //开启最大化最小化按钮
-                    area: ['520px','100%'],
+                    area: ['540px','100%'],
                     content: "{:url('grantAuth')}?gid="+data.id //iframe的url
                 });
             }

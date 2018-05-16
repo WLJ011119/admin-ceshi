@@ -25,6 +25,10 @@ class ComposerStaticInit52222304d5bb7779a11d17849b1bbbb4
         array (
             'app\\' => 4,
         ),
+        'P' => 
+        array (
+            'PHPTool\\' => 8,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -47,6 +51,10 @@ class ComposerStaticInit52222304d5bb7779a11d17849b1bbbb4
         'app\\' => 
         array (
             0 => __DIR__ . '/../..' . '/application',
+        ),
+        'PHPTool\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/xiucaiwu/tp5tool/src',
         ),
     );
 

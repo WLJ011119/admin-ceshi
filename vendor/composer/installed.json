@@ -177,5 +177,49 @@
                 "email": "448901948@qq.com"
             }
         ]
+    },
+    {
+        "name": "xiucaiwu/tp5tool",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/xiucaiwu/tp5tool.git",
+            "reference": "85e1234dce407ad0846f9a488081b860ccdda99c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/xiucaiwu/tp5tool/85e1234dce407ad0846f9a488081b860ccdda99c.zip",
+            "reference": "85e1234dce407ad0846f9a488081b860ccdda99c",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.4.0",
+            "topthink/framework": ">=5.0"
+        },
+        "time": "2018-04-28T07:05:28+00:00",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "PHPTool\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "xiucai",
+                "email": "xiuwu_just@163.com"
+            }
+        ],
+        "description": "The ThinkPHP5 Common Tool Classes",
+        "homepage": "https://github.com/xiucaiwu/tp5tool",
+        "keywords": [
+            "PHPTool",
+            "thinkphp5"
+        ]
     }
 ]

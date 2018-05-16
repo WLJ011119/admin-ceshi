@@ -12,13 +12,32 @@ use think\Facade\Request;
 use think\Facade\Response;
 use think\Facade\Config;
 use think\Controller;
+use PHPTool\Auth;
+use PHPTool\NodeTree;
 
 class Adminbase extends Controller
 {
     protected $userInfo;
+    protected $urlParameter;
 
     public function initialize() {
-        $this->tologin();
+        $reqObj = Request::instance();
+        $this->urlParameter = [
+            'domain'    => $reqObj->domain(),
+            'module'    => $reqObj->module(),
+            'controller'=> $reqObj->controller(),
+            'action'    => $reqObj->action(),
+            'path'      => $reqObj->module() . '/' . $reqObj->controller() . '/' . $reqObj->action(),
+        ];
+        // 完整的url中path部分
+        $path = strtolower($this->urlParameter['path']);
+        // 登陆链接的path
+        $login_path = 'adminer/login/index';
+        if($path == $login_path) {
+            return true;
+        }
+        $this->getUserInfo();
+        $this->authCheck();
         $this->specialActionCheck();
         $authConf = Config::pull('auth');
         if(isset($authConf['auth_menu']) && $authConf['auth_menu']) {
@@ -29,32 +48,16 @@ class Adminbase extends Controller
     }
 
     /**
-     * 判断是否登陆
-     */
-    public function tologin() {
-        $this->getUserInfo();
-        $reqobj = Request::instance();
-        $module = $reqobj->module();            // 模块
-        $controller = $reqobj->controller();    // 控制器
-        $action = $reqobj->action();            // 方法
-        // 完整的url中path部分
-        $path = strtolower($module . '/' . $controller . '/' . $action);
-        // 登陆链接的path
-        $login_path = 'adminer/login/index';
-        if(empty($this->userInfo) && $path != $login_path) {
-            $this->redirect('/login');
-        }
-    }
-
-    /**
      * 获取登陆用户信息
      */
     public function getUserInfo() {
         $this->userInfo = session('user_info');
+        if(empty($this->userInfo)) $this->redirect('/login');
+        $this->assign('userInfo', $this->userInfo);
     }
 
     /**
-     * 用户权限数组分配给模板
+     * 用户拥有的权限数组分配给模板
      * @param array $ruleTree
      */
     public function assignUserRuleTree() {
@@ -68,8 +71,27 @@ class Adminbase extends Controller
      */
     public function assignRuleTree() {
         $rule_list = \app\adminer\model\AuthRule::getRuleList();
-        $rule_tree = \extend\PHPTree::makeTree($rule_list);
+        $rule_tree = NodeTree::makeTree($rule_list);
         $this->assign('rule_tree', $rule_tree);
+    }
+
+    /**
+     * 权限检查
+     * @return bool
+     */
+    public function authCheck() {
+        if($this->userInfo['super']) {
+            return true;
+        }
+        $auth = new Auth();
+        if($auth->check(strtolower($this->urlParameter['path']), $this->userInfo['id'])) {
+            return true;
+        } else {
+            if(Request::instance()->isAjax()) {
+                $this->resultData('$_501');
+            }
+            exit("无权操作!");
+        }
     }
     /**
      * 格式化返回数据
@@ -81,11 +103,7 @@ class Adminbase extends Controller
         if (is_string($code)) {
             @eval('$code = \\extend\\Statuscode::' . $code . ';');
         }
-        $requestObj = Request::instance();   // 获取 模块/控制器/操作名称
-        $module = $requestObj->module();
-        $controller = $requestObj->controller();
-        $action = $requestObj->action();
-        $result['cmd'] = $module.'/'.$controller.'/'.$action;    //接口名称
+        $result['cmd'] = $this->urlParameter['path'];    //接口名称
         $result['errCode'] = $code[0];
         $result['msg'] = $code[1];
         if ($type == 'array' && !is_array($data)) {
@@ -131,19 +149,17 @@ class Adminbase extends Controller
      * @return string
      */
     protected function specialActionCheck() {
-        $requestObj = Request::instance();   // 获取 模块/控制器/操作名称
-        $module = $requestObj->module();
-        $controller = $requestObj->controller();
-        $action = $requestObj->action();
-        $url = $module .'/'. $controller .'/'. $action;
         // 特殊行为集合
         $specialController = [
             'adminer/member/add','adminer/member/edit','adminer/member/grant',
             'adminer/group/add','adminer/group/edit','adminer/group/grantauth',
         ];
-        if(in_array(strtolower($url), $specialController)) {
+        if(in_array(strtolower($this->urlParameter['path']), $specialController)) {
             if($this->userInfo['super'] != 1) {
-                return '你无权操作请联系超级管理';
+                if(Request::instance()->isAjax()) {
+                  $this->resultData('$_500');
+                }
+                exit('无权操作请联系超级管理');
             }
         }
     }

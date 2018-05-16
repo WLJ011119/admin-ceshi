@@ -16,8 +16,6 @@ use extend\PHPTree;
 class Login extends Adminbase
 {
     public function index() {
-        // 权限列表
-        $rule_tree = [];
         if($this->request->isPost()) {
             $username = Request::post('userName');
             $password = Request::post('password');
@@ -39,17 +37,14 @@ class Login extends Adminbase
                     'username'  => $user_info['username'],
                     'super'     => $user_info['super'],
                 ];
-                if($user_info['super']) {
-                    $rule_list = AuthRule::getRuleList();
-                    $rule_tree = PHPTree::makeTree($rule_list);
-
-                }
-
-                session('rule_tree', $rule_tree);
                 session('user_info', $user_session_info);
                 $this->resultData('$_0');
             }
             $this->resultData('$_3');
+        }
+        $userInfo = session('user_info');
+        if($userInfo) {
+            $this->redirect('index/index');
         }
         return $this->fetch('index');
     }

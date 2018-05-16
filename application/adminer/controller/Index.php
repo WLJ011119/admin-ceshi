@@ -2,7 +2,9 @@
 namespace app\adminer\controller;
 
 
-class Index extends Adminbase
+use think\view\driver\Think;
+
+class Index extends NotAuth
 {
     public function index()
     {
@@ -27,5 +29,48 @@ class Index extends Adminbase
 
         $this->assign('sys_info', $sys_info);
         return $this->fetch('welcome');
+    }
+
+    public function editPassword() {
+        $uid = input('uid');
+        if($this->userInfo['id'] != $uid && $this->userInfo['super'] != 1) {
+            return '无权操作请联系超级管理';
+        }
+        if(\Think\Facade\Request::isPost()) {
+            $uid = input('uid');
+            $username = input('username');
+            $password = input('password');
+            $repassword = input('repassword');
+
+            if(empty($uid) || empty($username) || empty($password)) {
+                $this->resultData('$_103');
+            }
+            if(strlen($password) < 6) {
+                $this->resultData('$_201');
+            }
+            if($password != $repassword) {
+                $this->resultData('$_200');
+            }
+            $salt = randStr(6);
+            $data = [
+                'username'  => $username,
+                'password'  => md5($password.$salt),
+                'salt'      => $salt,
+                'status'    => 1,
+            ];
+            if(\app\adminer\model\AuthUser::updateUser($uid, $data)) {
+                $this->resultData('$_0');
+            } else {
+                $this->resultData('$_1');
+            }
+        } else {
+            $memberInfo = \app\adminer\model\AuthUser::getUser(['id'=>$uid]);
+            if(empty($memberInfo)) {
+                return '管理员不存在';
+            }
+
+            $this->assign('memberInfo', $memberInfo);
+            return $this->fetch('member/editpassword');
+        }
     }
 }

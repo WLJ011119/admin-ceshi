@@ -11,4 +11,5 @@ return array(
     'think\\' => array($vendorDir . '/topthink/think-image/src'),
     'extend\\' => array($baseDir . '/extend'),
     'app\\' => array($baseDir . '/application'),
+    'PHPTool\\' => array($vendorDir . '/xiucaiwu/tp5tool/src'),
 );

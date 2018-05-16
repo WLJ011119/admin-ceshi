@@ -101,7 +101,6 @@ class AuthUser extends Model
             ->where('ga.uid', $uid)
             ->where('g.status', 1)
             ->select();
-        echo db('auth_group_access')->getLastSql();
         return $res;
     }
 

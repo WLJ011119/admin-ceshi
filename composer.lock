@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "50be3f38120ddd7bab9665bec935b07e",
+    "content-hash": "5785387b97ea56583926e135a3e9b132",
     "packages": [
         {
             "name": "topthink/framework",
@@ -176,12 +176,56 @@
                 }
             ],
             "time": "2017-05-27T06:58:09+00:00"
+        },
+        {
+            "name": "xiucaiwu/tp5tool",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xiucaiwu/tp5tool.git",
+                "reference": "85e1234dce407ad0846f9a488081b860ccdda99c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/xiucaiwu/tp5tool/85e1234dce407ad0846f9a488081b860ccdda99c.zip",
+                "reference": "85e1234dce407ad0846f9a488081b860ccdda99c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "topthink/framework": ">=5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PHPTool\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "xiucai",
+                    "email": "xiuwu_just@163.com"
+                }
+            ],
+            "description": "The ThinkPHP5 Common Tool Classes",
+            "homepage": "https://github.com/xiucaiwu/tp5tool",
+            "keywords": [
+                "PHPTool",
+                "thinkphp5"
+            ],
+            "time": "2018-04-28T07:05:28+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "xiucaiwu/tp5tool": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

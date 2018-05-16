@@ -11,7 +11,7 @@ namespace app\adminer\controller;
 use app\adminer\model\AuthRule;
 use think\facade\Request;
 use think\facade\Response;
-use extend\Tree;
+use PHPTool\SelectTree;
 
 class System extends Adminbase
 {
@@ -23,7 +23,7 @@ class System extends Adminbase
                 'parent_key'    => 'parent_id',
                 'menu_name'     => 'title',
             ];
-            $tree = new Tree($rule_list, $option);
+            $tree = new SelectTree($rule_list, $option);
             $html_tree = $tree->getArray();
             $data = [
                 'code'      => 0,
@@ -43,7 +43,7 @@ class System extends Adminbase
             $update = [];
             $data = [
                 'parent_id' => $pid,
-                'name'      => input('post.path', ''),
+                'name'      => input('post.path', '', 'strtolower'),
                 'title'     => input('post.menu', ''),
                 'sort'      => input('post.num', 0, 'intval'),
                 'status'    => input('post.status', 0, 'intval'),
@@ -81,7 +81,7 @@ class System extends Adminbase
                 'parent_key'    => 'parent_id',
                 'menu_name'     => 'title',
             ];
-            $tree = new Tree($rule_list, $option);
+            $tree = new SelectTree($rule_list, $option);
             $html_tree = $tree->getArray(0,0, ' ');
         }
         $this->assign('tree', $html_tree);
@@ -96,7 +96,7 @@ class System extends Adminbase
                 $this->resultData('$_100');
             }
             $data = [
-                'name'      => input('post.path', ''),
+                'name'      => input('post.path', '', 'strtolower'),
                 'title'     => input('post.menu', ''),
                 'sort'      => input('post.num', 0, 'intval'),
                 'status'    => input('post.status', 0, 'intval'),
