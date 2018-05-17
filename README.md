@@ -17,6 +17,12 @@ ThinkAdmin v1.0
  
 > ThinkPHP5的运行环境要求PHP5.6以上。
 
+## 注意事项
+
+手动导入thinkadmin.sql。
+config/database.php 需手动下载,可在[官方仓库](https://github.com/top-think/think.git "")寻找。
+第三方composer均未上传需手动更新,比如composer update xiucaiwu/tp5tool。
+
 ## 界面预览
 
 ![界面预览](https://gitee.com/bullet/thinkadmin/raw/master/screenshots/20180516182602.png "截图1")
