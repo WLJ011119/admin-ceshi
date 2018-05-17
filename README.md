@@ -19,9 +19,14 @@ ThinkAdmin v1.0
 
 ## 注意事项
 
-手动导入thinkadmin.sql。
-config/database.php 需手动下载,可在[官方仓库](https://github.com/top-think/think.git "")寻找。
-第三方composer均未上传需手动更新,比如composer update xiucaiwu/tp5tool。
+手动导入thinkadmin.sql。  
+config/database.php 需手动下载,可在[官方仓库](https://github.com/top-think/think.git "")寻找。  
+第三方composer均未上传需手动更新,比如composer update xiucaiwu/tp5tool。  
+
+## 在线体验
+[点我爽一下](http://thinkadmin.91-t.com/ "爽一下")  
+账号: guest  
+密码: 123456  
 
 ## 界面预览
 
