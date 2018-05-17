@@ -8,9 +8,8 @@
 
 namespace app\adminer\controller;
 
-use think\Facade\Request;
+use think\facade\Request;
 use app\adminer\model\AuthGroup;
-use extend\PHPTree;
 
 class Group extends Adminbase
 {

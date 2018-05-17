@@ -7,7 +7,7 @@
 
 namespace app\adminer\controller;
 
-use think\Facade\Request;
+use think\facade\Request;
 use app\adminer\model\AuthUser;
 use app\adminer\model\AuthGroup;
 

@@ -8,9 +8,9 @@
 
 namespace app\adminer\controller;
 
-use think\Facade\Request;
-use think\Facade\Response;
-use think\Facade\Config;
+use think\facade\Request;
+use think\facade\Response;
+use think\facade\Config;
 use think\Controller;
 use PHPTool\Auth;
 use PHPTool\NodeTree;
@@ -21,13 +21,12 @@ class Adminbase extends Controller
     protected $urlParameter;
 
     public function initialize() {
-        $reqObj = Request::instance();
         $this->urlParameter = [
-            'domain'    => $reqObj->domain(),
-            'module'    => $reqObj->module(),
-            'controller'=> $reqObj->controller(),
-            'action'    => $reqObj->action(),
-            'path'      => $reqObj->module() . '/' . $reqObj->controller() . '/' . $reqObj->action(),
+            'domain'    => Request::domain(),
+            'module'    => Request::module(),
+            'controller'=> Request::controller(),
+            'action'    => Request::action(),
+            'path'      => Request::module() . '/' . Request::controller() . '/' . Request::action(),
         ];
         // 完整的url中path部分
         $path = strtolower($this->urlParameter['path']);

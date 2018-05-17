@@ -9,9 +9,9 @@
 namespace app\adminer\controller;
 
 use think\Controller;
-use think\Facade\Request;
-use think\Facade\Response;
-use think\Facade\Config;
+use think\facade\Request;
+use think\facade\Response;
+use think\facade\Config;
 use PHPTool\NodeTree;
 
 class NotAuth extends Controller
@@ -21,13 +21,12 @@ class NotAuth extends Controller
 
     public function initialize()
     {
-        $reqObj = Request::instance();
         $this->urlParameter = [
-            'domain'    => $reqObj->domain(),
-            'module'    => $reqObj->module(),
-            'controller'=> $reqObj->controller(),
-            'action'    => $reqObj->action(),
-            'path'      => $reqObj->module() . '/' . $reqObj->controller() . '/' . $reqObj->action(),
+            'domain'    => Request::domain(),
+            'module'    => Request::module(),
+            'controller'=> Request::controller(),
+            'action'    => Request::action(),
+            'path'      => Request::module() . '/' . Request::controller() . '/' . Request::action(),
         ];
         $this->getUserInfo();
         $authConf = Config::pull('auth');

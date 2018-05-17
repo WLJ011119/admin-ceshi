@@ -2,8 +2,6 @@
 namespace app\adminer\controller;
 
 
-use think\view\driver\Think;
-
 class Index extends NotAuth
 {
     public function index()
