@@ -71,4 +71,8 @@ class Index extends NotAuth
             return $this->fetch('member/editpassword');
         }
     }
+
+    public function diy() {
+        return '此功能需要你根据业务场景具体开发';
+    }
 }
