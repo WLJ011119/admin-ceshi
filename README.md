@@ -21,7 +21,8 @@ ThinkAdmin v1.0
 
 手动导入thinkadmin.sql。  
 config/database.php 需手动下载,可在[官方仓库](https://github.com/top-think/think.git "")寻找。  
-第三方composer均未上传需手动更新,比如composer update xiucaiwu/tp5tool。  
+本地没有composer的可以用项目自带的但是要修改composer.bat中php.ini的路径为你本地的路径,更要注意composer不能在开启debug的模式下使用,所以最好copy一份php.ini重起名字(本项目叫php-composer.ini)去掉xdebug选项,本方法只适合windows系统。   
+第三方composer均未上传需手动更新,比如composer update xiucaiwu/tp5tool。不会用composer的直接composer update(ps:所有的第三方包都会更新,所以不掌握composer的phper不是好phper)。  
 
 ## 在线体验
 [点我爽一下](http://thinkadmin.91-t.com/ "爽一下")  
