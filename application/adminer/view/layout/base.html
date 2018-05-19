@@ -69,7 +69,7 @@
                     {if condition='!empty($children.name)'}
                     <a href="javascript:;"  data-url="/{$children.name}" data-id="{$children.id}" tab-item>{$children.title}</a>
                     {else}
-                    <a href="javascript:;" tab-item>{$children.title}</a>
+                    <a href="javascript:;">{$children.title}</a>
                     {/if}
                     {if condition="isset($children.children)"}
                     <dl class="layui-nav-child">
